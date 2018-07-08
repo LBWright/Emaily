@@ -1,6 +1,19 @@
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
+const mongoose = require('mongoose')
 const keys = require('../config/keys')
+
+const User = mongoose.model('users')
+
+passport.serializeUser((user, done) => {
+  done(null, user.id)
+})
+
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => {
+    done(null, user)
+  })
+})
 
 passport.use(
   new GoogleStrategy(
@@ -10,9 +23,17 @@ passport.use(
       callbackURL: '/auth/google/callback'
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log('access token', accessToken) // basically says that the user gives us permission to do something in the future
-      console.log('refresh token', refreshToken) // allows us to refresh the access token
-      console.log('profile', profile)
+      // check for user to exist
+      User.findOne({ googleId: profile.id }).then(user => {
+        if (user) {
+          done(null, user)
+        } else {
+          // if user doesn't exist, create a new user
+          new User({ googleId: profile.id }).save().then(user => {
+            done(null, user)
+          })
+        }
+      })
     }
   )
 )
