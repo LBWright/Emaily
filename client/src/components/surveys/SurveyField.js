@@ -1,6 +1,8 @@
+// SurveyField contains logic to render a single
+// label and text input
 import React from 'react';
 
-const SurveyField = ({ label, input, meta: { error, touched } }) => {
+export default ({ input, label, meta: { error, touched } }) => {
   return (
     <div>
       <label>{label}</label>
@@ -11,5 +13,3 @@ const SurveyField = ({ label, input, meta: { error, touched } }) => {
     </div>
   );
 };
-
-export default SurveyField;

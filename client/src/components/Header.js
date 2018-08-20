@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Payments from './Payments';
+
 class Header extends Component {
   renderContent() {
     switch (this.props.auth) {
@@ -33,8 +34,8 @@ class Header extends Component {
       <nav>
         <div className="nav-wrapper">
           <Link
-            className="left brand-logo"
             to={this.props.auth ? '/surveys' : '/'}
+            className="left brand-logo"
           >
             Emaily
           </Link>
@@ -45,8 +46,8 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => ({
-  auth
-});
+function mapStateToProps({ auth }) {
+  return { auth };
+}
 
 export default connect(mapStateToProps)(Header);
